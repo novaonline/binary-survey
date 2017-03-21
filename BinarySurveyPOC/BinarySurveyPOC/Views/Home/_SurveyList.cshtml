@@ -1,0 +1,7 @@
+﻿@model List<BinarySurveyPOC.Models.Survey>
+<ul>
+    @foreach (var survey in Model)
+    {
+        <li><a href="/survey/@survey.SurveyID">@survey.SurveyQuestion</a></li>
+    }
+</ul>

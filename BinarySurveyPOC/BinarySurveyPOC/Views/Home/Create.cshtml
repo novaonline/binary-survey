@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("Create", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken();
+    <input id="lat" type="hidden" name="coords.lat" value="" />
+    <input id="lng" type="hidden" name="coords.lng" value="" />
+    @Html.TextBox("surveyQuestion")
+    <input type="range" name="distanceKm" min="1" max="5">
+    <select name="durationMinutes">
+        <option selected value="5">5 minutes</option>
+        <option value="10">10 minutes</option>
+        <option value="30">30 minutes</option>
+    </select>
+    <input id="submit" type="submit" disabled />
+}
+@section scripts{
+<script>
+        var latNode = document.getElementById("lat");
+        var lngNode = document.getElementById("lng");
+        var submitNode = document.getElementById("submit");
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    console.log(position)
+                    latNode.value = position.coords.latitude;
+                    lngNode.value = position.coords.longitude;
+                    submitNode.disabled = ""
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+        getLocation();
+    //$(function () {
+    //    https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452
+    //});
+</script>
+}
