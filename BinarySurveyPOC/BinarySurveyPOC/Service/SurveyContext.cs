@@ -8,6 +8,8 @@ using System.Data.Entity.Spatial;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using BinarySurveyPOC.Helper;
+using System.IO;
+
 namespace BinarySurveyPOC.Service
 {
     public class SurveyContext : DbContext
@@ -26,7 +28,7 @@ namespace BinarySurveyPOC.Service
         }
     }
 
-    public class SurveyDBInitializer : DropCreateDatabaseIfModelChanges<SurveyContext>
+    public class SurveyDBInitializer : DropCreateDatabaseAlways<SurveyContext>
     {
         protected override void Seed(SurveyContext context)
         {
@@ -35,6 +37,11 @@ namespace BinarySurveyPOC.Service
             defaultSurvey.Add(new Survey() { AddDate = DateTime.UtcNow.AddMinutes(-20), Location = Geo.getCircle(50.444479, -104.625281, 1), SurveyQuestion = "Do you like the books at the University?" });
             defaultSurvey.Add(new Survey() { AddDate = DateTime.UtcNow.AddMinutes(-10), Location = Geo.getCircle(50.431123, -104.557593, 2), SurveyQuestion = "Was your experience at subway good?" });
             context.Surveys.AddRange(defaultSurvey);
+            var sqlFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "SQL/*.sql");
+            foreach(string file in sqlFiles)
+            {
+                context.Database.ExecuteSqlCommand(File.ReadAllText(file));
+            }
             // execute the following sql files
 
             base.Seed(context);

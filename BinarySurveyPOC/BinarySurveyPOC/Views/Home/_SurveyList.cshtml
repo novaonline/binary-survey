@@ -1,7 +1,13 @@
-﻿@model List<BinarySurveyPOC.Models.Survey>
-<ul>
+﻿@using Humanizer;
+@model List<BinarySurveyPOC.Models.Survey>
+<div class="list-group">
     @foreach (var survey in Model)
     {
-        <li><a href="/survey/@survey.SurveyID">@survey.SurveyQuestion</a></li>
+        <a href="/Details/@survey.SurveyID" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">@survey.SurveyQuestion</h5>
+                <small class="text-muted">@*@survey.AddDate.Humanize()*@ some time ago</small>
+            </div>
+        </a>
     }
-</ul>
+</div>

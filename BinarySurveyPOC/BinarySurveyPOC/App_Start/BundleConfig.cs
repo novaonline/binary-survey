@@ -20,10 +20,16 @@ namespace BinarySurveyPOC
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js",
+                "~/Scripts/tether/tether.js",
+                "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/survey").Include(
+                "~/Scripts/survey/survey.js"
+                ));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
+                      "~/Content/tether/tether.min.css",
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
         }

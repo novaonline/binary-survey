@@ -3,24 +3,34 @@
     ViewBag.Title = "Create";
 }
 
-<h2>Create</h2>
+<h2>Create a Survey</h2>
 
 @using (Html.BeginForm("Create", "Home", FormMethod.Post))
 {
     @Html.AntiForgeryToken();
     <input id="lat" type="hidden" name="coords.lat" value="" />
     <input id="lng" type="hidden" name="coords.lng" value="" />
-    @Html.TextBox("surveyQuestion")
-    <input type="range" name="distanceKm" min="1" max="5">
-    <select name="durationMinutes">
-        <option selected value="5">5 minutes</option>
-        <option value="10">10 minutes</option>
-        <option value="30">30 minutes</option>
-    </select>
-    <input id="submit" type="submit" disabled />
+    <div class="form-group">
+        <input type="text" class="form-control" name="surveyQuestion" id="surveyQuestion" placeholder="Survey Question">
+    </div>
+    <div class="form-group">
+        <label for="distanceKm  ">Distance</label>
+        <input type="number" id="distanceKm" name="id="distanceKm"" min="0.5" step="0.5" max="5" value="2" class="form-control" placeholder="Distance in Kilometers">
+    </div>
+    <div class="form-group">
+        <label for="durationMinutes">Duration</label>
+        <select id="durationMinutes" name="durationMinutes" class="form-control">
+            <option selected value="5">5 minutes</option>
+            <option value="10">10 minutes</option>
+            <option value="30">30 minutes</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input id="submit" type="submit" class="btn btn-success" disabled />
+    </div>
 }
 @section scripts{
-<script>
+    <script>
         var latNode = document.getElementById("lat");
         var lngNode = document.getElementById("lng");
         var submitNode = document.getElementById("submit");
@@ -40,5 +50,5 @@
     //$(function () {
     //    https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452
     //});
-</script>
+    </script>
 }
