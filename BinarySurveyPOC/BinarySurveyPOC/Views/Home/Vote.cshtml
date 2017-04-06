@@ -1,0 +1,39 @@
+﻿@model BinarySurveyPOC.Models.Survey
+@{
+    ViewBag.Title = "Vote";
+}
+
+<h1>@Model.SurveyQuestion</h1>
+
+<div id="survey">
+    @using (Ajax.BeginForm(new AjaxOptions()
+    {
+        HttpMethod = "Post",
+        Url = "/Home/Vote?id=" + Model.SurveyID,
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "survey",
+
+    }))
+    {
+        @Html.AntiForgeryToken();
+        <input type="hidden" name="surveyResponse" value="1" />
+        <input type="submit" value="Yes" />
+    }
+    @using (Ajax.BeginForm(new AjaxOptions()
+    {
+        HttpMethod = "Post",
+        Url = "/Home/Vote?id=" + Model.SurveyID,
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "survey",
+
+    }))
+    {
+        @Html.AntiForgeryToken();
+        <input type="hidden" name="surveyResponse" value="0" />
+        <input type="submit" value="No" />
+    }
+</div>
+
+@section scripts{
+    @Scripts.Render("~/bundles/ajax")
+}

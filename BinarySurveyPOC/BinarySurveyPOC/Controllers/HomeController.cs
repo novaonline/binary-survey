@@ -48,6 +48,41 @@ namespace BinarySurveyPOC.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Vote(int id)
+        {
+            using (var ctx = new Service.SurveyContext())
+            {
+                //var hasVoted = ctx.SurveyResponses.Any(x=>x.SurveyId)
+                var model = ctx.Surveys.Find(id);
+                if (model == null)
+                {
+                    return HttpNotFound();
+                }
+                ViewBag.SurveyId = id;
+                return View(model);
+            }   
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public PartialViewResult Vote([System.Web.Http.FromUri]int id, [System.Web.Http.FromBody]bool surveyResponse)
+        {
+            using (var ctx = new Service.SurveyContext())
+            {
+                var model = ctx.SurveyResponses.Add(new Models.SurveyResponse()
+                {
+                    AddDate = DateTime.UtcNow,
+                    Response = surveyResponse,
+                    SurveyId = id
+                });
+                if (model.SurveyResponseID <= 0)
+                {
+                    return PartialView("_SurveyChart");
+                }
+                return PartialView("_SurveyChart");
+            }
+        }
+
         public async Task<PartialViewResult> Surveys(Models.Coordinates coords)
         {
             using (var ctx = new Service.SurveyContext())

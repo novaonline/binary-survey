@@ -26,6 +26,7 @@ namespace BinarySurveyPOC.Service
         {
             return Database.SqlQuery<Survey>("dbo.usp_surveys_get_by_lat_lng @lat, @lng", new SqlParameter("lat", coords.Lat), new SqlParameter("lng", coords.Lng)).ToListAsync();
         }
+
     }
 
     public class SurveyDBInitializer : DropCreateDatabaseAlways<SurveyContext>

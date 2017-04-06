@@ -28,6 +28,10 @@ namespace BinarySurveyPOC
                 "~/Scripts/survey/survey.js"
                 ));
 
+            bundles.Add(new ScriptBundle("~/bundles/ajax").Include(
+                "~/Scripts/jquery.unobtrusive-ajax.min.js"
+                ));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/tether/tether.min.css",
                       "~/Content/bootstrap.css",
