@@ -75,6 +75,7 @@ namespace BinarySurveyPOC.Controllers
                     Response = surveyResponse,
                     SurveyId = id
                 });
+                ctx.SaveChanges();
                 if (model.SurveyResponseID <= 0)
                 {
                     return PartialView("_SurveyChart");

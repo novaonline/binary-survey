@@ -1,37 +1,48 @@
 ﻿@model BinarySurveyPOC.Models.Survey
 @{
     ViewBag.Title = "Vote";
+    var token = Html.AntiForgeryToken();
 }
 
-<h1>@Model.SurveyQuestion</h1>
+<h1 class="survey-question text-center">@Model.SurveyQuestion</h1>
+<div id="survey" class="survey-response">
+    <div class="row container">
+        <div class="col-sm-6 text-center">
+            <div class="response-button">
+                @using (Ajax.BeginForm(new AjaxOptions()
+            {
+                HttpMethod = "Post",
+                Url = "/Home/Vote/" + Model.SurveyID,
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "survey",
 
-<div id="survey">
-    @using (Ajax.BeginForm(new AjaxOptions()
-    {
-        HttpMethod = "Post",
-        Url = "/Home/Vote?id=" + Model.SurveyID,
-        InsertionMode = InsertionMode.Replace,
-        UpdateTargetId = "survey",
+            }))
+            {
+                    @token
+                    <input type="hidden" name="surveyResponse" value="true" />
+                    <button class="btn btn-lg btn-primary text-capitalize" type="submit">YES</button>
 
-    }))
-    {
-        @Html.AntiForgeryToken();
-        <input type="hidden" name="surveyResponse" value="1" />
-        <input type="submit" value="Yes" />
-    }
-    @using (Ajax.BeginForm(new AjaxOptions()
-    {
-        HttpMethod = "Post",
-        Url = "/Home/Vote?id=" + Model.SurveyID,
-        InsertionMode = InsertionMode.Replace,
-        UpdateTargetId = "survey",
+                }
+            </div>
+        </div>
+        <div class="col-sm-6 text-center">
+            <div class="response-button">
+                @using (Ajax.BeginForm(new AjaxOptions()
+            {
+                HttpMethod = "POST",
+                Url = "/Home/Vote/" + Model.SurveyID,
+                InsertionMode = InsertionMode.Replace,
+                UpdateTargetId = "survey",
 
-    }))
-    {
-        @Html.AntiForgeryToken();
-        <input type="hidden" name="surveyResponse" value="0" />
-        <input type="submit" value="No" />
-    }
+            }))
+            {
+                    @token
+                    <input type="hidden" name="surveyResponse" value="false" />
+                    <button class="btn btn-lg btn-primary text-capitalize" type="submit">NO</button>
+                }
+            </div>
+        </div>
+    </div>
 </div>
 
 @section scripts{

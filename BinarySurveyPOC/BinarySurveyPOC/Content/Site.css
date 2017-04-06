@@ -22,3 +22,14 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.survey-question {
+    margin: 20px 0 20px;
+}
+.survey-response {
+    padding: 20px 0;
+}
+
+    .survey-response .response-button {
+        padding:20px;
+    }
