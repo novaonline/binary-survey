@@ -7,11 +7,12 @@
     debugger
     var chartInstance = new Chart(ctx, {
         type: 'bar',
+        scaleSteps:1,
         data: {
             labels: ['YES', 'NO'],
             datasets: [{
                 label: '# of Votes',
-                data: [12, 19],
+                data: [@Model.One, @Model.Zero],
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.2)',
                     'rgba(255, 99, 132, 0.2)',
