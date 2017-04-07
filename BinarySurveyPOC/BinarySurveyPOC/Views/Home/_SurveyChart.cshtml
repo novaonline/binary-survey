@@ -1,28 +1,67 @@
 ﻿@model BinarySurveyPOC.Models.SurveyResponsesSummary
 <div class="text-center">
-    <canvas id="reponseChart" width="500" height="500"></canvas>
+    <canvas id="reponseChart"></canvas>
 </div>
 <script>
-    var ctx = document.getElementById('reponseChart');
-    debugger
+    var ctx = document.getElementById('reponseChart').getContext("2d");
+    var chartData = {
+        labels: ['Yes','No'],
+        datasets: [{
+            label: 'Response',
+            data: [@Model.One, @Model.Zero],
+            backgroundColor: [
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 99, 132, 0.2)'
+
+            ],
+            borderColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255,99,132,1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+    var options = {
+        responsive: true,
+        barValueSpacing: 2,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                }
+            }]
+        },
+        legend: {
+            display: false
+        }
+    };
     var chartInstance = new Chart(ctx, {
         type: 'bar',
-        scaleSteps:1,
-        data: {
-            labels: ['YES', 'NO'],
-            datasets: [{
-                label: '# of Votes',
-                data: [@Model.One, @Model.Zero],
-                backgroundColor: [
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255,99,132,1)',
-                ],
-                borderWidth: 1
-            }]
-        }
-    })
+        data: chartData,
+        options: options
+    });
+
+    $(function () {
+        // Declare a proxy to reference the hub.
+        var survey = $.connection.surveyHub;
+        // Create a function that the hub can call to broadcast messages.
+        survey.client.surveyResponse = function (data) {
+            //
+            populateData(data);
+
+        };
+        // Start the connection.
+        $.connection.hub.start().done(function () {
+            var room = "survey-response-" + surveyId;
+            survey.server.joinRoom(room);
+            console.log("joined group: " + room);
+        });
+    });
+    function populateData(data) {
+        chartInstance.data.datasets[0].data[1] = data.zero;
+        chartInstance.data.datasets[0].data[0] = data.one;
+        chartInstance.update();
+
+    }
+
 </script>

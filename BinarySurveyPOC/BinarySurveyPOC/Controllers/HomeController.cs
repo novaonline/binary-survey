@@ -80,13 +80,19 @@ namespace BinarySurveyPOC.Controllers
                 {
                     return PartialView("_SurveyChart");
                 }
+
                 // todo, just group them.. but since this is a binary survey...
                 var surveyResponses = ctx.SurveyResponses.Where(x => x.SurveyId == id);
 
                 var surveyYes = surveyResponses.Count(y => y.Response == true);
-                var surveyNo = ctx.SurveyResponses.Count(x => x.Response == false);
+                var surveyNo = surveyResponses.Count(x => x.Response == false);
 
                 var summaryModel = new Models.SurveyResponsesSummary() { One = surveyYes, SurveyId = id, Zero = surveyNo };
+
+                // ping
+                var hubContext = GlobalHost.ConnectionManager.GetHubContext<Hubs.SurveyHub>();
+                hubContext.Clients.Group("survey-response-" + id).surveyResponse(new { zero = summaryModel.Zero, one = summaryModel.One});
+
                 return PartialView("_SurveyChart", summaryModel);
             }
         }

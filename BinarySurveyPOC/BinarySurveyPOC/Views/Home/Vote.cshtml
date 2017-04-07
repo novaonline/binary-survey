@@ -47,5 +47,8 @@
 
 @section scripts{
     @Scripts.Render("~/bundles/ajax")
+    <script src="~/Scripts/jquery.signalR-2.2.1.min.js"></script>
+    <script src="/signalr/hubs"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
+    <script>    var surveyId = @Model.SurveyID;</script>
 }
