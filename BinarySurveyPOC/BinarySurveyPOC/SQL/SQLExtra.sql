@@ -10,7 +10,9 @@ BEGIN
     SELECT *
     FROM Surveys
     where @g.STIntersects([Location].STAsText()) <> 0
+    AND GETUTCDATE() BETWEEN AddDate AND ExpiritionDate
     order by AddDate desc
+
 END
 
 CREATE SPATIAL INDEX [SPATIAL_Surveys_Location]

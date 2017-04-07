@@ -29,7 +29,7 @@ namespace BinarySurveyPOC.Service
 
     }
 
-    public class SurveyDBInitializer : DropCreateDatabaseIfModelChanges<SurveyContext>
+    public class SurveyDBInitializer : DropCreateDatabaseAlways<SurveyContext>
     {
         protected override void Seed(SurveyContext context)
         {
