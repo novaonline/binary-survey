@@ -75,12 +75,20 @@ namespace BinarySurveyPOC.Controllers
                     Response = surveyResponse,
                     SurveyId = id
                 });
+                // todo, just group them.. but since this is a binary survey...
+                var surveyResponses = ctx.SurveyResponses.Where(x => x.SurveyId == id);
+
+                var surveyYes = surveyResponses.Count(y => y.Response == true);
+                var surveyNo = ctx.SurveyResponses.Count(x => x.Response == false);
+
+                var summaryModel = new Models.SurveyResponsesSummary() { One = surveyYes, SurveyId = id, Zero = surveyNo };
+
                 ctx.SaveChanges();
                 if (model.SurveyResponseID <= 0)
                 {
-                    return PartialView("_SurveyChart");
+                    return PartialView("_SurveyChart", summaryModel);
                 }
-                return PartialView("_SurveyChart");
+                return PartialView("_SurveyChart", summaryModel);
             }
         }
 
