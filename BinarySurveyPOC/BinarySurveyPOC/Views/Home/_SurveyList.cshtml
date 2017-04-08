@@ -1,13 +1,23 @@
 ﻿@using Humanizer;
 @model List<BinarySurveyPOC.Models.Survey>
 <div class="list-group">
-    @foreach (var survey in Model)
+    @if (Model.Count == 1)
     {
-        <a href="/Home/Vote/@survey.SurveyID" class="list-group-item list-group-item-action flex-column align-items-start">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">@survey.SurveyQuestion</h5>
-                <small class="text-muted">@survey.AddDate.Humanize()</small>
-            </div>
-        </a>
+        <script id="goToSurvey" >
+            @Url.Action("Vote","Home", new { id = Model.First().SurveyID })
+        </script>
     }
+    else
+    {
+        foreach (var survey in Model)
+        {
+            <a href="/Home/Vote/@survey.SurveyID" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@survey.SurveyQuestion</h5>
+                    <small class="text-muted">@survey.AddDate.Humanize()</small>
+                </div>
+            </a>
+        }
+    }
+
 </div>

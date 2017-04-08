@@ -17,12 +17,28 @@
 function getSurveys() {
 
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
+        var geoSuccess = function (position) {
             $.get("/home/surveys?lat=" + position.coords.latitude + "&lng=" + position.coords.longitude, function (data) {
-                document.getElementById("demo").innerHTML = data
-
+                if (false) {
+                    //window.location.href = "Home/Vote/"+ data.surveys[0].SurveyID
+                } else {
+                    document.getElementById("demo").innerHTML = data
+                }
+                if (document.getElementById("goToSurvey")) {
+                    var url = document.getElementById("goToSurvey").innerHTML;
+                    window.location.href = url;
+                }
             });
-        });
+        }
+        var geoError = function (error) {
+            console.error(error);
+        };
+        var geoOptions = {
+            enableHighAccuracy: true,
+            maximumAge: 30000,
+            timeout: 27000
+        };
+        navigator.geolocation.watchPosition(geoSuccess, geoError, geoOptions);
     } else {
         alert("Geolocation is not supported by this browser.");
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.SignalR;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -60,7 +61,7 @@ namespace BinarySurveyPOC.Controllers
                 }
                 ViewBag.SurveyId = id;
                 return View(model);
-            }   
+            }
         }
 
         [HttpPost]
@@ -91,17 +92,38 @@ namespace BinarySurveyPOC.Controllers
 
                 // ping
                 var hubContext = GlobalHost.ConnectionManager.GetHubContext<Hubs.SurveyHub>();
-                hubContext.Clients.Group("survey-response-" + id).surveyResponse(new { zero = summaryModel.Zero, one = summaryModel.One});
+                hubContext.Clients.Group("survey-response-" + id).surveyResponse(new { zero = summaryModel.Zero, one = summaryModel.One });
 
                 return PartialView("_SurveyChart", summaryModel);
             }
         }
 
-        public async Task<PartialViewResult> Surveys(Models.Coordinates coords)
+        public async Task<ActionResult> Surveys(Models.Coordinates coords)
         {
             using (var ctx = new Service.SurveyContext())
             {
-                return PartialView("_SurveyList", await ctx.GetSurveysAsync(coords));
+                var survey = await ctx.GetSurveysAsync(coords);
+                //var bodystring = RenderViewToString(this.ControllerContext, "_SurveyList", survey);
+                //return Json(new { surveys = survey, body = bodystring },JsonRequestBehavior.AllowGet);
+                return PartialView("_SurveyList", survey);
+            }
+        }
+
+
+        public static string RenderViewToString(ControllerContext context, string viewName, object model)
+        {
+            if (string.IsNullOrEmpty(viewName))
+                viewName = context.RouteData.GetRequiredString("action");
+
+            var viewData = new ViewDataDictionary(model);
+
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(context, viewName);
+                var viewContext = new ViewContext(context, viewResult.View, viewData, new TempDataDictionary(), sw);
+                viewResult.View.Render(viewContext, sw);
+
+                return sw.GetStringBuilder().ToString();
             }
         }
     }
